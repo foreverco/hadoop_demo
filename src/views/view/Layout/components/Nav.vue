@@ -2,38 +2,50 @@
   <!-- 头部整体盒子 -->
   <div id="header" class="container-fuild" :class="tabNav ? 'navscroll' : ''">
     <!-- 电脑导航 -->
-    <div class="header-nav container hidden-xs">
-      <!-- 导航内容 -->
-      <div class="navCon row">
-        <div id="navshowLogo">
-          <!-- <img src="@/assets/img/home/1-head-logo.png" alt /> -->
+    <div class="header-nav hidden-xs">
+      <div class="headerMsg">
+        <div class="logoBox">
+          <!-- <img src="@/assets/images/timg.jpg" alt="" /> -->
+          <span>大数据分析平台</span>
         </div>
-        <ul class="header-nav-wrapper">
+        <ul class="loginList">
           <li
-            v-for="(item, index) in navList"
-            :key="index"
-            :class="index == navIndex ? 'active' : ''"
-            @click="navClick1(index, item.name, item)"
+            v-if="!navShow"
+            @click="$router.replace({ name: 'ViewHomeindex' })"
           >
-            <router-link :to="item.path">
-              <span class="navTxt">{{ item.name }}</span>
-              <div id="line"></div>
-            </router-link>
-            <dl v-if="item.children && item.children.length > 0">
-              <dt v-for="(i, n) in item.children" :key="n">
-                <router-link :to="i.path">{{ i.name }}</router-link>
-              </dt>
-            </dl>
+            首页
           </li>
+          <li @click="getlogin">登录</li>
+          <li @click="getRegister">注册</li>
         </ul>
-        <!-- <ul class="loginBox">
-          <li>
-            <span class="glyphicon glyphicon-user"></span>
-          </li>
-          <li>登录</li>
-          <li>/</li>
-          <li>注册</li>
-        </ul> -->
+      </div>
+      <!-- 导航内容 -->
+      <div class="container" v-if="navShow">
+        <div class="navCon row">
+          <div id="navshowLogo">
+            <!-- <img src="@/assets/img/home/1-head-logo.png" alt /> -->
+          </div>
+          <ul class="header-nav-wrapper">
+            <template v-for="(item, index) in navList">
+              <li
+                :key="index"
+                v-if="!item.hidden"
+                :class="index == navIndex ? 'active' : ''"
+                @click="navClick1(index, item.name, item)"
+              >
+                <router-link :to="item.path">
+                  <span class="navTxt">{{ item.meta.title }}</span>
+                  <div id="line"></div>
+                </router-link>
+                <dl v-if="item.children && item.children.length > 0">
+                  <dt v-for="(i, n) in item.children" :key="n">
+                    <router-link :to="i.path">{{ i.meta.title }}</router-link>
+                  </dt>
+                </dl>
+              </li>
+            </template>
+          </ul>
+        </div>
       </div>
     </div>
 
@@ -124,11 +136,17 @@
             :class="index == navIndex ? 'active' : ''"
             data-toggle="collapse"
             aria-expanded="false"
-            :data-target="item.children.length > 0 ? targetId : '#menu'"
+            :data-target="
+              item.children && item.children.length > 0 ? targetId : '#menu'
+            "
             @click="navClick(index, item.name, item)"
           >
-            <router-link :to="item.children.length == '0' ? item.path : ''">
-              {{ item.name }}
+            <router-link
+              :to="
+                item.children && item.children.length == '0' ? item.path : ''
+              "
+            >
+              {{ item.meta.title }}
               <span
                 v-if="item.children && item.children.length > 0"
                 :class="item.menuClass"
@@ -166,6 +184,7 @@ export default {
       burgerActive: false,
       userMsgActive: false,
       isLogin: "",
+      navShow: true,
       targetId: "333",
       navIndex: sessionStorage.getItem("navIndex")
         ? sessionStorage.getItem("navIndex")
@@ -185,16 +204,11 @@ export default {
           name1: "QIYEWENHUA",
           path: "/software/aboutUs",
           menuClass: "el-icon-arrow-down",
-          // path: "/software",
           children: [
             {
               name: "企业简介",
               path: "/software/aboutUs"
             },
-            // {
-            //   name: "荣誉历程",
-            //   path: "/software/rongyu"
-            // },
             {
               name: "组织架构",
               path: "/software/jiagou"
@@ -210,12 +224,7 @@ export default {
           name1: "CPZHONGXIN",
           path: "/product/productpack",
           menuClass: "el-icon-arrow-down",
-          // path: "/service",
           children: [
-            // {
-            //   name: "原料展示",
-            //   path: "/product/bigData"
-            // },
             {
               name: "养生茶",
               path: "/product/productpack"
@@ -228,14 +237,6 @@ export default {
               name: "药食同源",
               path: "/product/productpack2"
             }
-            // {
-            //   name: "种植实力",
-            //   path: "/product/stockshow"
-            // }
-            // {
-            //   name: "防伪查询",
-            //   path: "/software/bigData"
-            // }
           ]
         },
         {
@@ -243,7 +244,6 @@ export default {
           name1: "XWZHONGXIN",
           path: "/base/plantingbase",
           menuClass: "el-icon-arrow-down",
-          // path: "/newsinformation",
           children: [
             {
               name: "种植基地",
@@ -268,7 +268,6 @@ export default {
           name1: "XWZHONGXIN",
           path: "/news/companynews",
           menuClass: "el-icon-arrow-down",
-          // path: "/newsinformation",
           children: [
             {
               name: "企业新闻",
@@ -278,48 +277,13 @@ export default {
               name: "视频展示",
               path: "/news/videonews"
             }
-            // {
-            //   name: "重要公告",
-            //   path: "/software/bigData"
-            // },
-            // {
-            //   name: "行业动态",
-            //   path: "/software/smartTown"
-            // },
-            // {
-            //   name: "专题报道",
-            //   path: "/software/bigData"
-            // },
-            //  {
-            //   name: "视频展示",
-            //   path: "/software/bigData"
-            // }
           ]
         },
-        // {
-        //   name: "公司介绍",
-        //   path: "/companyintroduction",
-        //   children: []
-        // },
-        // {
-        //   name: "工作机会",
-        //   path: "/jobchance",
-        //   children: []
-        // },
         {
           name: "联系我们",
           name1: "LIANXIWOMEN",
           path: "/contactus",
-          children: [
-            // {
-            //   name: "人力资源",
-            //   path: "/software/bigData"
-            // },
-            //  {
-            //   name: "联系我们",
-            //   path: "/contactus"
-            // }
-          ]
+          children: []
         }
       ]
     };
@@ -332,7 +296,17 @@ export default {
       }
       console.log("我变了");
       console.log(from);
+      this.watchRouter();
+      console.log(this.navShow);
+      sessionStorage.setItem("navShow", this.navShow);
     }
+  },
+  created() {
+    this.navShow = JSON.parse(sessionStorage.getItem("navShow"));
+    console.log(JSON.parse(sessionStorage.getItem("navShow")));
+    console.log(this.$router.options);
+    let routers = this.$router.options.routes[1].children;
+    this.navList = routers;
   },
   mounted() {
     window.addEventListener("scroll", this.handleScroll);
@@ -355,7 +329,16 @@ export default {
         this.burgerActive = !this.burgerActive;
       }
     },
-    navClick1(index, name, e) {
+    watchRouter() {
+      if (this.$route.path == "/login") {
+        this.navShow = false;
+      } else if (this.$route.path == "/register") {
+        this.navShow = false;
+      } else {
+        this.navShow = true;
+      }
+    },
+    navClick1(index, name) {
       this.navIndex = index;
       sessionStorage.setItem("navIndex", index);
       this.sonName = "";
@@ -395,6 +378,9 @@ export default {
         console.log(this.$route);
         this.$router.replace({ name: "Login" });
       }
+    },
+    getRegister() {
+      this.$router.replace({ name: "Register" });
     }
   }
 };
@@ -416,6 +402,43 @@ export default {
   // background-size: auto;
   // background-position: bottom;
   .header-nav {
+    .headerMsg {
+      background: $maincolor;
+      padding: 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      .logoBox {
+        // border: 1px solid red;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        img {
+          width: 30px;
+        }
+        span {
+          margin-left: 10px;
+          font-size: 24px;
+          letter-spacing: 5px;
+          font-weight: 700;
+        }
+      }
+      .loginList {
+        li {
+          float: left;
+          width: 80px;
+          border-right: 1px solid #ccc;
+          text-align: center;
+          font-weight: 700;
+          &:last-child {
+            border-right: 0;
+          }
+          &:hover {
+            cursor: pointer;
+          }
+        }
+      }
+    }
     .navCon {
       // border: 1px solid red;
       height: 100px;
@@ -434,12 +457,13 @@ export default {
         li {
           float: left;
           // border: 1px solid blue;
+          font-weight: 600;
           height: 100%;
           position: relative;
           display: flex;
           align-items: center;
           flex-wrap: wrap;
-          width: 105px;
+          width: 135px;
           margin-left: 10px;
           margin-right: 10px;
           &.active {
@@ -479,7 +503,7 @@ export default {
             }
             #line {
               width: 0px;
-              height: 2px;
+              height: 3px;
               border-radius: 2px;
               position: absolute;
               bottom: 0;
@@ -502,7 +526,7 @@ export default {
           dl {
             display: none;
             position: absolute;
-            width: 105px;
+            width: 125px;
             top: 100%;
             left: 50%;
             transform: translateX(-50%);

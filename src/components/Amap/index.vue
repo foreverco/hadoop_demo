@@ -28,7 +28,7 @@ import { AMapManager, lazyAMapApiLoaderInstance } from "vue-amap";
 import { getlgla } from "./common";
 import { adressSetMapCenter } from "./location";
 import { getImageLayer } from "./imageLayer";
-import { amapSetMarker, amapClearMarker, amapSetCircle } from "./marker";
+import { amapSetMarker, amapClearMarker } from "./marker";
 export default {
   name: "Amap",
   props: {
@@ -84,10 +84,32 @@ export default {
           this.setmarker();
           // this.setCircle();
         });
-        this.map.on("mousedown", e => {
-          this.setCircle();
-        });
+        // this.map.on("mousedown", e => {
+        //   this.setCircle();
+        // });
       });
+    },
+    // 创建地图
+    createMap() {
+      this.map = new AMap.Map("amapContainer", {
+        center: [116.327911, 39.939229],
+        // center: [114.039128, 41.895942],
+        layers: [
+          // 卫星
+          new AMap.TileLayer.Satellite(),
+          new AMap.TileLayer(),
+          // 创建图片图层
+          getImageLayer(this.imageLayer)
+        ],
+        zoom: this.zoom,
+        pitch: 20, // 地图俯仰角度，有效范围 0 度- 83 度
+        viewMode: "3D" // 地图模式
+        // mapStyle: "amap://styles/grey" //设置地图的显示样式
+      });
+    },
+    // 销毁地图
+    mapDestroy() {
+      this.map && this.map.destroy();
     },
     // 定位地图中心
     setMapCenter(value) {
@@ -100,11 +122,11 @@ export default {
     /* 清除点覆盖物 */
     clearMarker() {
       amapClearMarker(this.map);
-    },
-    /* 设置圆覆盖物 */
-    setCircle() {
-      amapSetCircle(this.map);
     }
+    /* 设置圆覆盖物 */
+    // setCircle() {
+    //   amapSetCircle(this.map);
+    // }
   }
 };
 </script>

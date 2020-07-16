@@ -1,6 +1,7 @@
 <template>
-  <div id="insect">
-    <div class="leftBox">
+  <div id="insect" class="container">
+    <div class="row"></div>
+    <div class="leftBox col-md-6 col-xs-12">
       <div class="titleBox">
         <Title titleTxt="地区虫情预警"></Title>
         <div>
@@ -70,7 +71,7 @@
         </div>
       </div>
     </div>
-    <div class="rightBox">
+    <div class="rightBox col-md-6 col-xs-12">
       <div class="titleBox">
         <Title titleTxt="自然天气预警"></Title>
         <ul class="daysList">
@@ -498,7 +499,7 @@ export default {
 <style lang="scss" scoped>
 #insect {
   height: 100%;
-  position: relative;
+  // position: relative;
   .titleBox {
     height: 35px;
     // background: #00000050;
@@ -508,20 +509,20 @@ export default {
     align-items: center;
   }
   .leftBox {
-    width: 55%;
+    // width: 55%;
     height: 100%;
-    position: absolute;
-    left: 0;
+    // position: absolute;
+    // left: 0;
     .block {
       align-items: flex-end;
     }
     // border: 1px solid blue;
   }
   .rightBox {
-    width: 43.5%;
+    // width: 43.5%;
     height: 100%;
-    position: absolute;
-    right: 0;
+    // position: absolute;
+    // right: 0;
     // border: 1px solid blue;
     .titleBox {
       .daysList {

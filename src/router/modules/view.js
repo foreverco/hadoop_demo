@@ -12,9 +12,20 @@ let viewRouter = [
   {
     path: "/login",
     name: "Login",
+    hidden: true,
     component: () => import("@/views/view/Login"),
     meta: {
       title: "登录",
+      icon: "navmenu"
+    }
+  },
+  {
+    path: "/register",
+    name: "Register",
+    hidden: true,
+    component: () => import("@/views/view/Register"),
+    meta: {
+      title: "注册",
       icon: "navmenu"
     }
   },

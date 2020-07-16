@@ -13,12 +13,12 @@ export default {
   components: {
     LayoutNav,
     LayoutMain
-    // HeaderNav
   },
   data() {
     return {};
   },
   mounted() {
+    console.log(123)
     this.$store.dispatch("insect/getsevenWeather");
   }
 };

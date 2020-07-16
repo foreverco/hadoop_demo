@@ -17,13 +17,15 @@ export default {
 </script>
 <style lang="scss">
 #mainContent {
-  height: calc(100vh - 80px);
+  // height: calc(100vh - 80px);
   display: flex;
   align-items: center;
   justify-content: center;
   .content {
-    width: 96%;
-    height: 97%;
+    border: 1px solid red;
+    width: 100%;
+    // height: 97%;
+    // border: 1px solid red;
     box-sizing: border-box;
   }
 }
